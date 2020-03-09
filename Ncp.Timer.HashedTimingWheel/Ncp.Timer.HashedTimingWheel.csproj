@@ -5,6 +5,8 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>Simple single thread hashed timing wheel . It's good at game dev, platform dev.</Description>
+    <PackageProjectUrl>https://github.com/AngusXi/Ncp.Timer</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/AngusXi/Ncp.Timer</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
