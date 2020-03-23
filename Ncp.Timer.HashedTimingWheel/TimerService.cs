@@ -270,46 +270,6 @@ namespace Ncp.Timer.HashedTimingWheel
         }
 
         #region private method
-        private void UpdateTickExLite(List<Timer> tmpList, long millisecond)
-        {
-            tmpList.Sort((l, r) => { return l.NextTriggerTick >= r.NextTriggerTick ? 1 : -1; });
-            var sortedCount = tmpList.Count;
-            for (int i = 0; i < sortedCount; i++)
-            {
-                var curTimer = tmpList[i];
-                var timerId = curTimer.Id;
-                if (timerId != 0 && curTimer.NextTriggerTick < millisecond)
-                {
-                    try
-                    {
-                        runningMillionSeconds = curTimer.NextTriggerTick;//纠正当前的基准时间，为了添加定时器做准备
-                        curTimer.Callback(curTimer.UserData);
-                    }
-                    catch (Exception ex)
-                    {
-                        //log.error(string.Format("TimerManager UpdateTickManulEx timerId {0}", timerId), ex);
-                    }
-
-                    if (HasTimer(timerId) == true)
-                    {
-                        if (--curTimer.TriggerCount > 0)
-                        {
-                            var timerLite = curTimer.GetTimerStruct();
-                            RemoveTimer(curTimer);
-                            loopTimerDic.Add(timerLite.Id, timerLite);
-                        }
-                        else
-                            RemoveTimer(curTimer);
-                    }
-                }
-                else
-                {
-                    var timerLite = curTimer.GetTimerStruct();
-                    RemoveTimer(curTimer);
-                    loopTimerDic.Add(timerLite.Id, timerLite);
-                }
-            }
-        }
         private void PushWheel(Timer timer)
         {
             var offset = (int)(timer.NextTriggerTick - runningMillionSeconds) / TickInterval;
@@ -342,13 +302,6 @@ namespace Ncp.Timer.HashedTimingWheel
             return id;
         }
 
-        private void ResetWheels()
-        {
-            for (var i = 0; i < wheels.Length; ++i)
-            {
-                wheels[i].Reset();
-            }
-        }
 
         private bool HasTimer(long id)
         {
